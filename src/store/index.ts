@@ -1,6 +1,7 @@
 import { proxy } from "valtio";
 import {
   App,
+  AppCss,
   ENTRY_FILE_NAME,
   IMPORT_MAP_FILE_NAME,
   ImportMap,
@@ -11,7 +12,7 @@ import { fileName2Language } from "../utils";
 import { uid } from "uid";
 
 export const EntryFileId = uid();
-const DefaultFiles = [
+const DefaultFiles: IFile[] = [
   {
     id: EntryFileId,
     name: ENTRY_FILE_NAME,
@@ -25,6 +26,12 @@ const DefaultFiles = [
     language: fileName2Language(MAIN_FILE_NAME),
     value: App,
     readonly: true,
+  },
+  {
+    id: uid(),
+    name: "App.css",
+    language: "css",
+    value: AppCss,
   },
 ];
 

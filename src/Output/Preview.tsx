@@ -5,6 +5,8 @@ import iframeData from "./iframe.html?raw";
 import { getIframeUrl } from "../utils";
 import { MessageType } from "../constants";
 import importmap from "../template/import-map.json?raw";
+import { useSnapshot } from "valtio";
+import { store } from "../store";
 
 const iframeUrl = getIframeUrl(iframeData);
 const Preview: FC<{
@@ -12,14 +14,20 @@ const Preview: FC<{
 }> = ({ code }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const handleMessage = useMemoizedFn((ev: MessageEvent) => {});
+  const snap = useSnapshot(store);
 
   useUpdateEffect(() => {
     iframeRef.current?.contentWindow?.postMessage({
       type: MessageType.update,
       code,
       importmap,
+      cssFilesCode: snap.files
+        .filter((file) => file.language === "css")
+        .map((file) => ({
+          code: file.value,
+        })),
     });
-  }, [code]);
+  }, [code, snap.files]);
 
   useMount(() => {
     window.addEventListener("message", handleMessage);

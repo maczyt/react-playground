@@ -1,6 +1,7 @@
 export { default as App } from "./template/App.tsx?raw";
 export { default as Main } from "./template/main.tsx?raw";
 export { default as ImportMap } from "./template/import-map.json?raw";
+export { default as AppCss } from "./template/App.css?raw";
 
 // App组件名
 export const MAIN_FILE_NAME = "App.tsx";

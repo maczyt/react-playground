@@ -27,10 +27,12 @@ function codeTransform(code: string, filename: string) {
               console.log("moduleName", moduleName);
               const moduleFile = getModuleFile(store.files, moduleName);
               if (!moduleFile) return;
-              // css/json
+              // css
               if (moduleFile.name.endsWith(".css")) {
-                console.log("moduleFile css", moduleFile.name);
-              } else if (moduleFile.name.endsWith(".json")) {
+                path.remove();
+              }
+              // json
+              else if (moduleFile.name.endsWith(".json")) {
               } else {
                 const result =
                   codeTransform(moduleFile.value, moduleFile.name) ?? "";

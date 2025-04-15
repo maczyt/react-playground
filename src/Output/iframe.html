@@ -12,12 +12,32 @@
         window.parent.postMessage({ type: "loaded", message: "" });
       });
 
+      function setStyle(cssFiles) {
+        const cssFragment = document.createDocumentFragment();
+        cssFiles.forEach((css) => {
+          const randomId = new Date().getTime();
+          const style = document.createElement("style");
+          style.setAttribute("id", `style_${randomId}`);
+          cssFragment.appendChild(style);
+          const cssNode = document.createTextNode(css.code);
+          style.appendChild(cssNode);
+        });
+        document.head.appendChild(cssFragment);
+      }
+
       function clear() {
         const appSrcTag = document.querySelector("#appSrc");
         const oldSrc = appSrcTag.getAttribute("src");
         appSrcTag.remove();
         // 清除blob url资源
         URL.revokeObjectURL(oldSrc);
+
+        // 清除style
+        const appStyleTags =
+          document.querySelectorAll('style[id^="style_"]') || [];
+        appStyleTags.forEach((tag) => {
+          tag.remove();
+        });
       }
 
       // 接收父页面的message，接收代码数据，用来模块化执行渲染
@@ -26,6 +46,11 @@
         // 更新 importmap
         if (data.importmap) {
           document.querySelector("#importmapSrc").innerHTML = data.importmap;
+        }
+
+        // 处理css
+        if (data.cssFilesCode) {
+          setStyle(data.cssFilesCode);
         }
 
         const script = document.createElement("script");
