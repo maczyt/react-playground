@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!--es-module-shims-->
+  </head>
+  <body>
+    <script>
+      window.addEventListener("load", () => {
+        window.parent.postMessage({ type: "loaded", message: "" });
+      });
+
+      function clear() {
+        const appSrcTag = document.querySelector("#appSrc");
+        const oldSrc = appSrcTag.getAttribute("src");
+        appSrcTag.remove();
+        // 清除blob url资源
+        URL.revokeObjectURL(oldSrc);
+      }
+
+      // 接收父页面的message，接收代码数据，用来模块化执行渲染
+      window.addEventListener("message", ({ data }) => {
+        if (data.type !== "update") return;
+        // 更新 importmap
+        if (data.importmap) {
+          document.querySelector("#importmapSrc").innerHTML = data.importmap;
+        }
+
+        const script = document.createElement("script");
+        const newSrc = URL.createObjectURL(
+          new Blob([data.code], {
+            type: "application/javascript",
+          })
+        );
+        script.src = newSrc;
+        script.id = "appSrc";
+        script.type = "module";
+        document.body.appendChild(script);
+        window.parent.postMessage({
+          type: "done",
+          message: "最新代码更新好了喔",
+        });
+      });
+    </script>
+    <script type="importmap" id="importmapSrc"></script>
+    <script id="appSrc"></script>
+    <div id="root">
+      <div
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        Loading...
+      </div>
+    </div>
+  </body>
+</html>
