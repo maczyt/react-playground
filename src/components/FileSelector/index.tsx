@@ -10,6 +10,7 @@ const FileSelect = () => {
   return (
     <Box
       sx={{
+        width: "100%",
         display: "flex",
         height: "38px",
         borderBottom: (theme) => `1px solid ${theme.palette.repl.border}`,

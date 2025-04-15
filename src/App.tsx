@@ -34,9 +34,10 @@ function App() {
                   <Splitter.Panel defaultSize="50%" min="20%" max="70%">
                     <Box
                       sx={{
+                        width: "100%",
                         height: "100%",
-                        display: "grid",
-                        gridTemplateRows: "auto 1fr",
+                        display: "flex",
+                        flexDirection: "column",
                       }}
                     >
                       <FileSelect />
