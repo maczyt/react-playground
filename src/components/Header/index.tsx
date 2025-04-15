@@ -15,10 +15,13 @@ const Header = () => {
         background: (theme) => theme.palette.nav.bg,
         boxShadow: (theme) => theme.palette.nav.boxShadow,
         color: (theme) => theme.palette.base,
+        borderBottom: (theme) => theme.palette.nav.borderBottom,
         height: "50px",
         display: "flex",
         justifyContent: "space-between",
         padding: "0 1em",
+        position: "relative",
+        zIndex: 10,
       }}
     >
       <Box

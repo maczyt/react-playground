@@ -10,7 +10,7 @@ import { editFile } from "../../store/actions";
 const useStyles = makeStyles((theme: Theme) => {
   return {
     active: {
-      color: theme.palette.repl.colorBranding,
+      color: `${theme.palette.repl.colorBranding} !important`,
       borderBottom: `3px solid ${theme.palette.repl.colorBranding}`,
     },
   };
@@ -32,6 +32,8 @@ const FileItem: FC<{
         display: "inline-flex",
         alignItems: "center",
         cursor: "pointer",
+        fontFamily: "var(--font-code)",
+        color: (theme) => theme.palette.repl.textLight,
       }}
       className={clsx({
         [classes.active]: isActive,
@@ -53,7 +55,7 @@ const FileItem: FC<{
       {status === "label" ? (
         <Box
           sx={{
-            padding: "8px 10px 6px",
+            padding: "8px 10px 4px",
             height: "100%",
             display: "inline-flex",
             placeItems: "center",
@@ -92,6 +94,7 @@ const FileItem: FC<{
             placeItems: "center",
             padding: "8px 10px 6px 0",
             cursor: "pointer",
+            color: (theme) => theme.palette.repl.textLight,
           }}
         >
           <CloseOutlined />

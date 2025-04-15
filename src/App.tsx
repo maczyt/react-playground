@@ -24,23 +24,30 @@ function App() {
           >
             <Header />
             <Box>
-              <Splitter style={{ height: "100%" }}>
-                <Splitter.Panel defaultSize="50%" min="20%" max="70%">
-                  <Box
-                    sx={{
-                      height: "100%",
-                      display: "grid",
-                      gridTemplateRows: "auto 1fr",
-                    }}
-                  >
-                    <FileSelect />
-                    <Editor />
-                  </Box>
-                </Splitter.Panel>
-                <Splitter.Panel>
-                  <Output />
-                </Splitter.Panel>
-              </Splitter>
+              <Box
+                sx={{
+                  height: "100%",
+                  background: (theme) => theme.palette.repl.bg,
+                }}
+              >
+                <Splitter style={{ height: "100%" }}>
+                  <Splitter.Panel defaultSize="50%" min="20%" max="70%">
+                    <Box
+                      sx={{
+                        height: "100%",
+                        display: "grid",
+                        gridTemplateRows: "auto 1fr",
+                      }}
+                    >
+                      <FileSelect />
+                      <Editor />
+                    </Box>
+                  </Splitter.Panel>
+                  <Splitter.Panel>
+                    <Output />
+                  </Splitter.Panel>
+                </Splitter>
+              </Box>
             </Box>
           </Box>
         </ThemeProvider>

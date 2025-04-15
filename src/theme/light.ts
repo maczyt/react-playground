@@ -16,6 +16,7 @@ export const lightTheme = createTheme({
       bg: "#fff",
       border: "#ddd",
       colorBranding: "#42b883",
+      textLight: "#888",
     },
   },
 });

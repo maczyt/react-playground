@@ -1,12 +1,18 @@
 body {
   font-size: 13px;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 html, body {
   padding: 0;
   margin: 0;
+  overflow: hidden;
 }
 
 * {
   box-sizing: border-box;
+}
+
+:root {
+  --font-code: Menlo, Monaco, Consolas, "Courier New", monospace;
 }

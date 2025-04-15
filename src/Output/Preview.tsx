@@ -38,18 +38,16 @@ const Preview: FC<{
     window.removeEventListener("message", handleMessage);
   });
   return (
-    <Box width="100%" height="100%">
-      <Box
-        ref={iframeRef}
-        component="iframe"
-        src={iframeUrl}
-        sx={{
-          width: "100%",
-          height: "100%",
-          border: "none",
-        }}
-      />
-    </Box>
+    <Box
+      ref={iframeRef}
+      component="iframe"
+      src={iframeUrl}
+      sx={{
+        width: "100%",
+        height: "100%",
+        border: "none",
+      }}
+    />
   );
 };
 

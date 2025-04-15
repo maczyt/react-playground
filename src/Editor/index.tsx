@@ -2,6 +2,7 @@ import MonacoEditor, { loader } from "@monaco-editor/react";
 import { useSnapshot } from "valtio";
 import { store } from "../store";
 import { useMemoizedFn } from "ahooks";
+import { useTheme } from "../theme/useTheme";
 
 loader.config({
   paths: {
@@ -11,6 +12,7 @@ loader.config({
 
 const Editor = () => {
   const snap = useSnapshot(store);
+  const { theme } = useTheme();
   const activeFile = snap.activeFile;
   const handleMount = useMemoizedFn((editor: IEditor, monaco: IMonaco) => {
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
@@ -25,6 +27,7 @@ const Editor = () => {
       language={activeFile.language}
       path={activeFile.name}
       onMount={handleMount}
+      theme={theme === "dark" ? "vs-dark" : "light"}
     />
   ) : null;
 };
