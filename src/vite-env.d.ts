@@ -16,6 +16,10 @@ declare global {
      * 不显示在编辑面板中
      */
     hidden?: boolean;
+    /**
+     * left or right
+     */
+    fixed?: "left" | "right";
   }
 
   interface IFiles {

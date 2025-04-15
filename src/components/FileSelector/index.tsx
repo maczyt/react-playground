@@ -16,7 +16,8 @@ const FileSelect = () => {
       }}
     >
       <Box>
-        {Object.values(state.files)
+        {state.files
+          .filter((file) => file.fixed !== "right")
           .filter((file) => !file.hidden)
           .map((file) => {
             return (
@@ -55,6 +56,29 @@ const FileSelect = () => {
         >
           <PlusOutlined />
         </Box>
+      </Box>
+      <Box
+        sx={{
+          marginLeft: "auto",
+        }}
+      >
+        {state.files
+          .filter((file) => file.fixed === "right")
+          .filter((file) => !file.hidden)
+          .map((file) => {
+            return (
+              <FileItem
+                file={file}
+                key={file.id}
+                onClick={() => {
+                  store.activeId = file.id;
+                }}
+                onDoubleClick={() => {
+                  store.editId = file.id;
+                }}
+              />
+            );
+          })}
       </Box>
     </Box>
   );

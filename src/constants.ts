@@ -6,7 +6,7 @@ export { default as AppCss } from "./template/App.css?raw";
 // App组件名
 export const MAIN_FILE_NAME = "App.tsx";
 // esm模块映射文件名
-export const IMPORT_MAP_FILE_NAME = "import-map.json";
+export const IMPORT_MAP_FILE_NAME = "Import Map";
 // 主入口文件名
 export const ENTRY_FILE_NAME = "main.tsx";
 

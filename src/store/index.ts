@@ -33,26 +33,24 @@ const DefaultFiles: IFile[] = [
     language: "css",
     value: AppCss,
   },
+  {
+    id: uid(),
+    name: IMPORT_MAP_FILE_NAME,
+    language: "json",
+    value: ImportMap,
+    readonly: true,
+    fixed: "right",
+  },
 ];
 
 export const store = proxy<{
   files: IFile[];
-  importMaps: IFile[];
   activeId: string;
   editId?: string;
   get activeFile(): IFile | undefined;
 }>({
   activeId: DefaultFiles.find((file) => file.name === MAIN_FILE_NAME)?.id!,
   files: DefaultFiles,
-  importMaps: [
-    {
-      id: uid(),
-      name: IMPORT_MAP_FILE_NAME,
-      language: fileName2Language(IMPORT_MAP_FILE_NAME),
-      value: ImportMap,
-      readonly: true,
-    },
-  ],
   get activeFile() {
     return this.files.find((file: IFile) => file.id === this.activeId);
   },
