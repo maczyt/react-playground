@@ -1,18 +1,21 @@
 import { transform } from "@babel/standalone";
 import { MessageType } from "../constants";
 import { beforeTransformCodeHandler, getModuleFile } from "../utils";
-import { store } from "../store";
 
 self.addEventListener("message", async ({ data }: MessageEvent) => {
   if (data.type !== "compile") return;
-  const compiledCode = codeTransform(data.value.value, data.value.name);
+  const compiledCode = codeTransform(
+    data.value.value,
+    data.value.name,
+    data.value.files
+  );
   self.postMessage({
     type: MessageType.update,
     code: compiledCode,
   });
 });
 
-function codeTransform(code: string, filename: string) {
+function codeTransform(code: string, filename: string, files: IFile[]) {
   const _code = beforeTransformCodeHandler(filename, code);
   const result = transform(_code, {
     presets: ["react", "typescript"],
@@ -24,8 +27,7 @@ function codeTransform(code: string, filename: string) {
             // 处理各种import资源
             const moduleName = path.node.source.value;
             if (moduleName.startsWith(".")) {
-              console.log("moduleName", moduleName);
-              const moduleFile = getModuleFile(store.files, moduleName);
+              const moduleFile = getModuleFile(files, moduleName);
               if (!moduleFile) return;
               // css
               if (moduleFile.name.endsWith(".css")) {
@@ -33,9 +35,11 @@ function codeTransform(code: string, filename: string) {
               }
               // json
               else if (moduleFile.name.endsWith(".json")) {
+                // TODO: json to js
               } else {
                 const result =
-                  codeTransform(moduleFile.value, moduleFile.name) ?? "";
+                  codeTransform(moduleFile.value, moduleFile.name, files) ?? "";
+
                 path.node.source.value = URL.createObjectURL(
                   new Blob([result], { type: "application/javascript" })
                 );

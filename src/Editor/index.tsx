@@ -5,6 +5,7 @@ import { useMemoizedFn, useSize, useUpdateEffect } from "ahooks";
 import { useTheme } from "../theme/useTheme";
 import { Box } from "@mui/system";
 import { useRef } from "react";
+import { editFile } from "../store/actions";
 
 loader.config({
   paths: {
@@ -37,6 +38,11 @@ const Editor = () => {
       {activeFile ? (
         <MonacoEditor
           value={activeFile.value}
+          onChange={(value) => {
+            editFile(activeFile.id, (file) => {
+              file.value = value ?? "";
+            });
+          }}
           height={"100%"}
           language={activeFile.language}
           path={activeFile.name}

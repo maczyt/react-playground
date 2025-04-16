@@ -50,6 +50,10 @@
 
         // 处理css
         if (data.cssFilesCode) {
+          // remove old styles
+          document
+            .querySelectorAll('style[id^="style_"]')
+            .forEach((el) => el.remove());
           setStyle(data.cssFilesCode);
         }
 
