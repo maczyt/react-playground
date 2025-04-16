@@ -1,8 +1,16 @@
-import { MoonOutlined, SunOutlined } from "@ant-design/icons";
+import {
+  DownloadOutlined,
+  MoonOutlined,
+  ReloadOutlined,
+  ShareAltOutlined,
+  SunOutlined,
+} from "@ant-design/icons";
 import { Box, useTheme } from "@mui/system";
-import { Button, Tooltip } from "antd";
+import { Button, message, Tooltip } from "antd";
 import { useContext } from "react";
+import copy from "copy-text-to-clipboard";
 import { ThemeContext } from "../../theme";
+import { download } from "../../lib/download";
 
 const Header = () => {
   const { theme, setTheme } = useContext(ThemeContext);
@@ -51,6 +59,52 @@ const Header = () => {
             icon={isLight ? <SunOutlined /> : <MoonOutlined />}
             onClick={() => {
               setTheme(isLight ? "dark" : "light");
+            }}
+            style={{
+              color: _theme.palette.nav.btn,
+            }}
+          />
+        </Tooltip>
+        <Tooltip title={"Copy sharable URL"}>
+          <Button
+            color="default"
+            variant="link"
+            type="link"
+            icon={<ShareAltOutlined />}
+            onClick={() => {
+              if (copy(location.href)) {
+                message.success("Copied");
+              }
+            }}
+            style={{
+              color: _theme.palette.nav.btn,
+            }}
+          />
+        </Tooltip>
+        <Tooltip title={"Reload page"}>
+          <Button
+            color="default"
+            variant="link"
+            type="link"
+            icon={<ReloadOutlined />}
+            onClick={() => {
+              location.reload();
+            }}
+            style={{
+              color: _theme.palette.nav.btn,
+            }}
+          />
+        </Tooltip>
+        <Tooltip title={"Download project files"}>
+          <Button
+            color="default"
+            variant="link"
+            type="link"
+            icon={<DownloadOutlined />}
+            onClick={() => {
+              if (window.confirm("Download project files?")) {
+                download();
+              }
             }}
             style={{
               color: _theme.palette.nav.btn,
