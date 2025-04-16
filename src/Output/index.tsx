@@ -48,7 +48,7 @@ const Output = () => {
     watch((get) => {
       const files = get(store).files;
       const entryFile = files.find((file) => file.isEntry);
-      runCompile(entryFile);
+      runCompile(entryFile!);
     }, {});
   }, []);
 

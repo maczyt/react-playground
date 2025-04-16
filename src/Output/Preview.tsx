@@ -13,7 +13,7 @@ const Preview: FC<{
   code: string;
 }> = ({ code }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const handleMessage = useMemoizedFn((ev: MessageEvent) => {
+  const handleMessage = useMemoizedFn(() => {
     // console.log("ev", ev);
   });
   const snap = useSnapshot(store);
