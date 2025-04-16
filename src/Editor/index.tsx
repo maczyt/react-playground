@@ -27,6 +27,10 @@ const Editor = () => {
       esModuleInterop: true,
     });
     editorRef.current = editor;
+
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+      // 阻止浏览器保存页面
+    });
   });
 
   useUpdateEffect(() => {
