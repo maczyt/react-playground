@@ -40,7 +40,13 @@ const Header = () => {
           gap: "10px",
         }}
       >
-        <img src="/react.svg" />
+        <img
+          src={
+            process.env.NODE_ENV === "development"
+              ? "/react.svg"
+              : "/react-playground/react.svg"
+          }
+        />
         <span>React SFC Playground</span>
       </Box>
       <Box

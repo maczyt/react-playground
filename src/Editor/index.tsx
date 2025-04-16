@@ -11,7 +11,10 @@ import { debounce } from "lodash-es";
 
 loader.config({
   paths: {
-    vs: window.location.origin + "/min/vs",
+    vs:
+      window.location.origin + process.env.NODE_ENV === "development"
+        ? "/min/vs"
+        : "/react-playground/min/vs",
   },
 });
 
