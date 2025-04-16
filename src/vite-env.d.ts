@@ -30,4 +30,8 @@ declare global {
 
   type IEditor = Parameters<EditorProps["onMount"]>[0];
   type IMonaco = Parameters<EditorProps["onMount"]>[1];
+
+  interface ATADownloadFn {
+    (code: string, path: string): void;
+  }
 }

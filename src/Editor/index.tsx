@@ -6,6 +6,8 @@ import { useTheme } from "../theme/useTheme";
 import { Box } from "@mui/system";
 import { useRef } from "react";
 import { editFile } from "../store/actions";
+import { createATA } from "./ata";
+import { debounce } from "lodash-es";
 
 loader.config({
   paths: {
@@ -21,17 +23,32 @@ const Editor = () => {
   const editorRef = useRef<IEditor>(null);
 
   const size = useSize(containerRef);
-  const handleMount = useMemoizedFn((editor: IEditor, monaco: IMonaco) => {
-    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      jsx: monaco.languages.typescript.JsxEmit.Preserve,
-      esModuleInterop: true,
-    });
-    editorRef.current = editor;
+  const handleMount = useMemoizedFn(
+    async (editor: IEditor, monaco: IMonaco) => {
+      monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+        jsx: monaco.languages.typescript.JsxEmit.Preserve,
+        esModuleInterop: true,
+      });
+      editorRef.current = editor;
 
-    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-      // 阻止浏览器保存页面
-    });
-  });
+      // ata
+      const ata = await createATA((code, path) => {
+        monaco.languages.typescript.typescriptDefaults.addExtraLib(
+          code,
+          `file://${path}`
+        );
+      });
+      ata?.(editor.getValue());
+      const handleEditorChange = debounce(() => {
+        ata?.(editor.getValue());
+      });
+      editor.onDidChangeModelContent(handleEditorChange);
+
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+        // 阻止浏览器保存页面
+      });
+    }
+  );
 
   useUpdateEffect(() => {
     if (!editorRef.current) return;
