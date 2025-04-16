@@ -31,7 +31,6 @@ export const getModuleFile = (files: IFile[], moduleName: string) => {
 // 编辑前对代码处理
 export const beforeTransformCodeHandler = (filename: string, code: string) => {
   let _code = code;
-  // 如果没有引入React，开头添加React引用
   const regexReact = /import\s+React/g;
   if (
     (filename.endsWith(".jsx") || filename.endsWith(".tsx")) &&
@@ -40,4 +39,15 @@ export const beforeTransformCodeHandler = (filename: string, code: string) => {
     _code = `import React from 'react';\n${code}`;
   }
   return _code;
+};
+
+export const toJS = <T extends object>(
+  state: T
+): {
+  -readonly [P in keyof T]: T[P];
+} => {
+  return Object.keys(state).reduce((map, key) => {
+    map[key] = state[key as keyof T];
+    return map;
+  }, Object.create(null));
 };

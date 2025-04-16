@@ -10,15 +10,16 @@ import {
 } from "../constants";
 import { fileName2Language } from "../utils";
 import { uid } from "uid";
+import { hashToCode } from "../lib/hashCode";
 
-export const EntryFileId = uid();
 const DefaultFiles: IFile[] = [
   {
-    id: EntryFileId,
+    id: uid(),
     name: ENTRY_FILE_NAME,
     language: fileName2Language(ENTRY_FILE_NAME),
     value: Main,
     hidden: true,
+    isEntry: true,
   },
   {
     id: uid(),
@@ -26,6 +27,7 @@ const DefaultFiles: IFile[] = [
     language: fileName2Language(MAIN_FILE_NAME),
     value: App,
     readonly: true,
+    isMain: true,
   },
   {
     id: uid(),
@@ -43,14 +45,16 @@ const DefaultFiles: IFile[] = [
   },
 ];
 
+const files = hashToCode() ?? DefaultFiles;
+
 export const store = proxy<{
   files: IFile[];
   activeId: string;
   editId?: string;
   get activeFile(): IFile | undefined;
 }>({
-  activeId: DefaultFiles.find((file) => file.name === MAIN_FILE_NAME)?.id!,
-  files: DefaultFiles,
+  activeId: files.find((file) => file.isMain)?.id!,
+  files: files,
   get activeFile() {
     return this.files.find((file: IFile) => file.id === this.activeId);
   },

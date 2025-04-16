@@ -20,6 +20,8 @@ declare global {
      * left or right
      */
     fixed?: "left" | "right";
+    isEntry?: boolean;
+    isMain?: boolean;
   }
 
   interface IFiles {

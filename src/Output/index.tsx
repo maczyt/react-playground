@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import CompileWorker from "./compile.worker.ts?worker&inline";
 import { useDebounceFn, useMount } from "ahooks";
 import { MessageType } from "../constants";
-import { EntryFileId, store } from "../store";
+import { store } from "../store";
 import { watch } from "valtio/utils";
 import { useSnapshot } from "valtio";
+import { toJS } from "../utils";
+import { codeToHash } from "../lib/hashCode";
 
 const Output = () => {
   const compilerRef = useRef<Worker | null>(null);
@@ -28,19 +30,16 @@ const Output = () => {
     }
   });
   const { run: runCompile } = useDebounceFn((file: IFile) => {
+    const files = snap.files.map((file) => toJS(file));
     // 保存路由hash
+    location.hash = codeToHash(files);
 
     compilerRef.current?.postMessage({
       type: MessageType.compile,
       value: {
         name: file.name,
         value: file.value,
-        files: snap.files.map((file) => ({
-          ...Object.keys(file).reduce((map, key) => {
-            map[key] = file[key as keyof IFile];
-            return map;
-          }, Object.create(null)),
-        })),
+        files,
       },
     });
   });
@@ -48,7 +47,7 @@ const Output = () => {
   useEffect(() => {
     watch((get) => {
       const files = get(store).files;
-      const entryFile = files.find((file) => file.id === EntryFileId);
+      const entryFile = files.find((file) => file.isEntry);
       runCompile(entryFile);
     }, {});
   }, []);
