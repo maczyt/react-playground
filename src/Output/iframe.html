@@ -19,22 +19,6 @@
           filename: ev.filename,
         });
         clear();
-        document.getElementById("root").innerHTML = `
-          <div
-        style="
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        Loading...
-      </div>
-        `;
       });
 
       function setStyle(cssFiles) {
@@ -59,12 +43,36 @@
           URL.revokeObjectURL(oldSrc);
         }
 
+        // 清除importmap
+        const importmapElm = document.querySelector("#importmapSrc");
+        if (importmapElm) {
+          importmapElm.remove();
+        }
+
         // 清除style
         const appStyleTags =
           document.querySelectorAll('style[id^="style_"]') || [];
         appStyleTags.forEach((tag) => {
           tag.remove();
         });
+
+        // 清除内容
+        document.getElementById("root").innerHTML = `
+          <div
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        Loading...
+      </div>
+        `;
       }
 
       // 接收父页面的message，接收代码数据，用来模块化执行渲染
@@ -72,8 +80,13 @@
         if (data.type !== "update") return;
         clear();
         // 更新 importmap
+        // 销毁并重建 （因为重新的话，不会触发重新加载）
         if (data.importmap) {
-          document.querySelector("#importmapSrc").innerHTML = data.importmap;
+          const elm = document.createElement("script");
+          elm.type = "importmap";
+          elm.id = "importmapSrc";
+          elm.innerHTML = data.importmap;
+          document.head.appendChild(elm);
         }
 
         // 处理css

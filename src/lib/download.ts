@@ -8,7 +8,7 @@ import { saveAs } from "file-saver";
 
 export const download = async () => {
   const zip = new JSZip();
-  const files = store.files.map((file) => toJS(file));
+  const files = store.realFiles.map((file) => toJS(file));
   const src = zip.folder("src")!;
   files.forEach((file) => {
     src.file(file.name, file.value);

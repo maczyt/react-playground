@@ -2,11 +2,15 @@ import { proxy } from "valtio";
 import {
   App,
   AppCss,
-  ENTRY_FILE_NAME,
   IMPORT_MAP_FILE_NAME,
   ImportMap,
-  Main,
   MAIN_FILE_NAME,
+  React17ImportMap,
+  React17MainFile,
+  React18ImportMap,
+  React18MainFile,
+  React19ImportMap,
+  React19MainFile,
 } from "../constants";
 import { fileName2Language } from "../utils";
 import { uid } from "uid";
@@ -14,14 +18,6 @@ import { hashToCode } from "../lib/hashCode";
 import { proxyMap } from "valtio/utils";
 
 const DefaultFiles: IFile[] = [
-  {
-    id: uid(),
-    name: ENTRY_FILE_NAME,
-    language: fileName2Language(ENTRY_FILE_NAME),
-    value: Main,
-    hidden: true,
-    isEntry: true,
-  },
   {
     id: uid(),
     name: MAIN_FILE_NAME,
@@ -43,21 +39,46 @@ const DefaultFiles: IFile[] = [
     value: ImportMap,
     readonly: true,
     fixed: "right",
+    isImportMap: true,
   },
 ];
 
-const files = hashToCode() ?? DefaultFiles;
+const hashStore = hashToCode();
+const files = hashStore?.files ?? DefaultFiles;
+const activeId = hashStore?.activeId ?? files.find((file) => file.isMain)?.id!;
+const reactVersion = hashStore?.reactVersion ?? "react-18";
 
-export const store = proxy<{
-  files: IFile[];
-  activeId: string;
-  editId?: string;
-  get activeFile(): IFile | undefined;
-}>({
-  activeId: files.find((file) => file.isMain)?.id!,
-  files: files,
+export const store = proxy<
+  IStore & {
+    editId?: string;
+    get activeFile(): IFile | undefined;
+    get realFiles(): IFile[];
+    get importmap(): string;
+  }
+>({
+  activeId,
+  files,
+  reactVersion,
   get activeFile() {
     return this.files.find((file: IFile) => file.id === this.activeId);
+  },
+  get realFiles() {
+    // 结合react versions
+    let entryFile = React18MainFile;
+    if (this.reactVersion === "react-19") {
+      entryFile = React19MainFile;
+    } else if (this.reactVersion === "react-17") {
+      entryFile = React17MainFile;
+    }
+    return [entryFile, ...this.files];
+  },
+  get importmap() {
+    if (this.reactVersion === "react-19") {
+      return React19ImportMap;
+    } else if (this.reactVersion === "react-17") {
+      return React17ImportMap;
+    }
+    return React18ImportMap;
   },
 });
 

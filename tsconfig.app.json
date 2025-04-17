@@ -23,5 +23,5 @@
     "noUncheckedSideEffectImports": true
   },
   "include": ["src"],
-  "exclude": ["src/download"]
+  "exclude": ["src/download", "src/template"]
 }

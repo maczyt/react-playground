@@ -1,5 +1,14 @@
+import { fileName2Language } from "./utils";
+import React17Main from "./template/react17/main.tsx?raw";
+import React18Main from "./template/react18/main.tsx?raw";
+import React19Main from "./template/react19/main.tsx?raw";
+
+import { uid } from "uid";
+
+export { default as React17ImportMap } from "./template/react17/import-map.json?raw";
+export { default as React18ImportMap } from "./template/react18/import-map.json?raw";
+export { default as React19ImportMap } from "./template/react19/import-map.json?raw";
 export { default as App } from "./template/App.tsx?raw";
-export { default as Main } from "./template/main.tsx?raw";
 export { default as ImportMap } from "./template/import-map.json?raw";
 export { default as AppCss } from "./template/App.css?raw";
 
@@ -18,3 +27,27 @@ export enum MessageType {
   compile = "compile",
   error = "error",
 }
+export const React17MainFile: IFile = {
+  id: uid(),
+  name: ENTRY_FILE_NAME,
+  language: fileName2Language(ENTRY_FILE_NAME),
+  value: React17Main,
+  hidden: true,
+  isEntry: true,
+};
+export const React18MainFile: IFile = {
+  id: uid(),
+  name: ENTRY_FILE_NAME,
+  language: fileName2Language(ENTRY_FILE_NAME),
+  value: React18Main,
+  hidden: true,
+  isEntry: true,
+};
+export const React19MainFile: IFile = {
+  id: uid(),
+  name: ENTRY_FILE_NAME,
+  language: fileName2Language(ENTRY_FILE_NAME),
+  value: React19Main,
+  hidden: true,
+  isEntry: true,
+};

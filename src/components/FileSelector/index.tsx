@@ -17,7 +17,7 @@ const FileSelect = () => {
       }}
     >
       <Box>
-        {state.files
+        {state.realFiles
           .filter((file) => file.fixed !== "right")
           .filter((file) => !file.hidden)
           .map((file) => {
@@ -63,7 +63,7 @@ const FileSelect = () => {
           marginLeft: "auto",
         }}
       >
-        {state.files
+        {state.realFiles
           .filter((file) => file.fixed === "right")
           .filter((file) => !file.hidden)
           .map((file) => {

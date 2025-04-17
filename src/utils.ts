@@ -29,14 +29,18 @@ export const getModuleFile = (files: IFile[], moduleName: string) => {
 };
 
 // 编辑前对代码处理
-export const beforeTransformCodeHandler = (filename: string, code: string) => {
+export const beforeTransformCodeHandler = (
+  filename: string,
+  code: string,
+  reactVersion: string
+) => {
   let _code = code;
   const regexReact = /import\s+React/g;
   if (
     (filename.endsWith(".jsx") || filename.endsWith(".tsx")) &&
     !regexReact.test(code)
   ) {
-    _code = `import React from 'react';\n${code}`;
+    _code = `import React from 'react@${reactVersion}';\n${code}`;
   }
   return _code;
 };

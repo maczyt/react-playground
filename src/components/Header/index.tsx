@@ -6,16 +6,20 @@ import {
   SunOutlined,
 } from "@ant-design/icons";
 import { Box, useTheme } from "@mui/system";
-import { Button, message, Tooltip } from "antd";
+import { Button, Divider, message, Space, Tooltip } from "antd";
 import { useContext } from "react";
 import copy from "copy-text-to-clipboard";
 import { ThemeContext } from "../../theme";
 import { download } from "../../lib/download";
+import GhostSelect from "../GhostSelect";
+import { useSnapshot } from "valtio";
+import { store } from "../../store";
 
 const Header = () => {
   const { theme, setTheme } = useContext(ThemeContext);
   const isLight = theme === "light";
   const _theme = useTheme();
+  const snap = useSnapshot(store);
   return (
     <Box
       component={"nav"}
@@ -55,6 +59,36 @@ const Header = () => {
           alignItems: "center",
         }}
       >
+        <Box mr="16px">
+          <Space>
+            <Box>React Version</Box>
+            <GhostSelect
+              options={[
+                {
+                  label: "react@19",
+                  value: "react-19",
+                },
+                {
+                  label: "react@18",
+                  value: "react-18",
+                },
+                {
+                  label: "react@17",
+                  value: "react-17",
+                },
+              ]}
+              value={snap.reactVersion}
+              onChange={(val) => {
+                store.reactVersion = val;
+              }}
+            />
+          </Space>
+        </Box>
+
+        <Box>
+          <Divider type="vertical" />
+        </Box>
+
         <Tooltip
           title={isLight ? "Switch to dark theme" : "Switch to light theme"}
         >
@@ -94,6 +128,7 @@ const Header = () => {
             type="link"
             icon={<ReloadOutlined />}
             onClick={() => {
+              location.hash = "";
               location.reload();
             }}
             style={{

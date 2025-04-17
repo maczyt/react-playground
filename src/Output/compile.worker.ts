@@ -9,7 +9,8 @@ self.addEventListener("message", async ({ data }: MessageEvent) => {
   const compiledCode = codeTransform(
     data.value.value,
     data.value.name,
-    data.value.files
+    data.value.files,
+    data.value.reactVersion
   );
   self.postMessage({
     type: MessageType.update,
@@ -18,8 +19,13 @@ self.addEventListener("message", async ({ data }: MessageEvent) => {
   });
 });
 
-function codeTransform(code: string, filename: string, files: IFile[]) {
-  const _code = beforeTransformCodeHandler(filename, code);
+function codeTransform(
+  code: string,
+  filename: string,
+  files: IFile[],
+  reactVersion: string
+) {
+  const _code = beforeTransformCodeHandler(filename, code, reactVersion);
   const result = transform(_code, {
     presets: ["react", "typescript"],
     filename,
@@ -29,6 +35,12 @@ function codeTransform(code: string, filename: string, files: IFile[]) {
           ImportDeclaration(path) {
             // 处理各种import资源
             const moduleName = path.node.source.value;
+            // 处理react版本
+            if (moduleName.includes("react")) {
+              if (!moduleName.includes("@")) {
+                path.node.source.value = `${moduleName}@${reactVersion}`;
+              }
+            }
             if (moduleName.startsWith(".")) {
               const moduleFile = getModuleFile(files, moduleName);
               if (!moduleFile) return;
@@ -41,7 +53,12 @@ function codeTransform(code: string, filename: string, files: IFile[]) {
                 // TODO: json to js
               } else {
                 const result =
-                  codeTransform(moduleFile.value, moduleFile.name, files) ?? "";
+                  codeTransform(
+                    moduleFile.value,
+                    moduleFile.name,
+                    files,
+                    reactVersion
+                  ) ?? "";
 
                 const url = URL.createObjectURL(
                   new Blob([result], { type: "application/javascript" })

@@ -32,9 +32,13 @@ const Output = () => {
     }
   });
   const { run: runCompile } = useDebounceFn((file: IFile) => {
-    const files = snap.files.map((file) => toJS(file));
+    const files = snap.realFiles.map((file) => toJS(file));
     // 保存路由hash
-    location.hash = codeToHash(files);
+    location.hash = codeToHash({
+      files,
+      reactVersion: snap.reactVersion,
+      activeId: snap.activeId,
+    });
 
     compilerRef.current?.postMessage({
       type: MessageType.compile,
@@ -42,13 +46,14 @@ const Output = () => {
         name: file.name,
         value: file.value,
         files,
+        reactVersion: snap.reactVersion.split("-").pop(),
       },
     });
   });
   // 编译代码
   useEffect(() => {
     watch((get) => {
-      const files = get(store).files;
+      const files = get(store).realFiles;
       const entryFile = files.find((file) => file.isEntry);
       runCompile(entryFile!);
     }, {});

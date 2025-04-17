@@ -22,6 +22,7 @@ declare global {
     fixed?: "left" | "right";
     isEntry?: boolean;
     isMain?: boolean;
+    isImportMap?: boolean;
   }
 
   interface IFiles {
@@ -33,5 +34,11 @@ declare global {
 
   interface ATADownloadFn {
     (code: string, path: string): void;
+  }
+
+  interface IStore {
+    files: IFile[];
+    activeId: string;
+    reactVersion: string;
   }
 }

@@ -1,15 +1,15 @@
 import { compress, decompress } from "./compress";
 
-export const hashToCode = (): IFile[] | void => {
+export const hashToCode = (): IStore | undefined => {
   const hash = location.hash.slice(1);
   try {
     if (hash) {
-      const files = decompress(hash);
-      return files;
+      const store = decompress(hash);
+      return store;
     }
   } catch (e) {}
 };
 
-export const codeToHash = (files: IFile[]): string => {
-  return compress(files);
+export const codeToHash = (store: IStore): string => {
+  return compress(store);
 };

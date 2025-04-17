@@ -4,9 +4,9 @@ import { FC, useRef } from "react";
 import iframeData from "./iframe.html?raw";
 import { getIframeUrl } from "../utils";
 import { MessageType } from "../constants";
-import importmap from "../template/import-map.json?raw";
 import { useSnapshot } from "valtio";
 import { errorStore, store } from "../store";
+import { merge } from "lodash-es";
 
 const iframeUrl = getIframeUrl(iframeData);
 const Preview: FC<{
@@ -26,11 +26,16 @@ const Preview: FC<{
     errorStore.filename = "";
     errorStore.message = "";
 
+    const importmap =
+      snap.files.find((file) => file.isImportMap)?.value ?? "{}";
+    const _importmap = JSON.stringify(
+      merge({}, JSON.parse(importmap), JSON.parse(snap.importmap))
+    );
     iframeRef.current?.contentWindow?.postMessage({
       type: MessageType.update,
       code,
-      importmap,
-      cssFilesCode: snap.files
+      importmap: _importmap,
+      cssFilesCode: snap.realFiles
         .filter((file) => file.language === "css")
         .map((file) => ({
           code: file.value,
