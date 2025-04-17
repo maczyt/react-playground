@@ -32,8 +32,28 @@ const Editor = () => {
       monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
         jsx: monaco.languages.typescript.JsxEmit.Preserve,
         esModuleInterop: true,
+        resolveJsonModule: true,
+        allowSyntheticDefaultImports: true,
+        allowJs: true,
       });
       editorRef.current = editor;
+
+      const handleTypeHint = () => {
+        store.files.forEach((file) => {
+          if (file.isImportMap || file.isEntry || file.isMain) return;
+          let key: string;
+          if (["json", "css"].includes(file.language)) {
+            key = `${file.name}`;
+          } else {
+            const name = file.name.split(".");
+            name.pop();
+            key = `${name.join(".")}`;
+          }
+        });
+      };
+      // 处理类型提示
+      // subscribe(store.files, handleTypeHint);
+      // handleTypeHint();
 
       // ata
       const ata = await createATA((code, path) => {
@@ -58,6 +78,7 @@ const Editor = () => {
     if (!editorRef.current) return;
     editorRef.current.layout();
   }, [size?.width]);
+
   return (
     <Box ref={containerRef} width={"100%"} flex="1">
       {activeFile ? (

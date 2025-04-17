@@ -1,6 +1,6 @@
 import { transform } from "@babel/standalone";
 import { MessageType } from "../constants";
-import { beforeTransformCodeHandler, getModuleFile } from "../utils";
+import { beforeTransformCodeHandler, getModuleFile, jsonToJs } from "../utils";
 
 const filenameMap = new Map<string, string>();
 self.addEventListener("message", async ({ data }: MessageEvent) => {
@@ -50,7 +50,12 @@ function codeTransform(
               }
               // json
               else if (moduleFile.name.endsWith(".json")) {
-                // TODO: json to js
+                const result = jsonToJs(moduleFile.value);
+                const url = URL.createObjectURL(
+                  new Blob([result], { type: "application/javascript" })
+                );
+                filenameMap.set(url, moduleFile.name);
+                path.node.source.value = url;
               } else {
                 const result =
                   codeTransform(

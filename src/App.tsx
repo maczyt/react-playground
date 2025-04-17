@@ -18,14 +18,12 @@ function App() {
             sx={{
               width: "100vw",
               height: "100vh",
-              display: "grid",
-              gridTemplateRows: "auto 1fr",
             }}
           >
             <Header />
             <Box
               sx={{
-                overflow: "hidden",
+                height: "calc(100vh - 50px)",
               }}
             >
               <Box
@@ -35,7 +33,14 @@ function App() {
                 }}
               >
                 <Splitter style={{ height: "100%" }}>
-                  <Splitter.Panel defaultSize="50%" min="20%" max="70%">
+                  <Splitter.Panel
+                    defaultSize="50%"
+                    min="20%"
+                    max="70%"
+                    style={{
+                      overflow: "visible",
+                    }}
+                  >
                     <Box
                       sx={{
                         width: "100%",

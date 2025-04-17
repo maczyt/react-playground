@@ -7,6 +7,7 @@ import { store } from "../../store";
 import { makeStyles } from "@mui/styles";
 import clsx from "clsx";
 import { editFile } from "../../store/actions";
+import { fileName2Language } from "../../utils";
 const useStyles = makeStyles((theme: Theme) => {
   return {
     active: {
@@ -83,6 +84,7 @@ const FileItem: FC<{
               store.editId = "";
               editFile(file.id, (file) => {
                 file.name = value;
+                file.language = fileName2Language(value);
               });
             }
           }}
@@ -91,6 +93,7 @@ const FileItem: FC<{
             store.editId = "";
             editFile(file.id, (file) => {
               file.name = value;
+              file.language = fileName2Language(value);
             });
           }}
         />

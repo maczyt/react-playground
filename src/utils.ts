@@ -55,3 +55,7 @@ export const toJS = <T extends object>(
     return map;
   }, Object.create(null));
 };
+
+export const jsonToJs = (jsonCode: string) => {
+  return `export default ${jsonCode}`;
+};
