@@ -28,19 +28,21 @@ const Preview: FC<{
 
     const importmap =
       snap.files.find((file) => file.isImportMap)?.value ?? "{}";
-    const _importmap = JSON.stringify(
-      merge({}, JSON.parse(importmap), JSON.parse(snap.importmap))
-    );
-    iframeRef.current?.contentWindow?.postMessage({
-      type: MessageType.update,
-      code,
-      importmap: _importmap,
-      cssFilesCode: snap.realFiles
-        .filter((file) => file.language === "css")
-        .map((file) => ({
-          code: file.value,
-        })),
-    });
+    try {
+      const _importmap = JSON.stringify(
+        merge({}, JSON.parse(importmap), JSON.parse(snap.importmap))
+      );
+      iframeRef.current?.contentWindow?.postMessage({
+        type: MessageType.update,
+        code,
+        importmap: _importmap,
+        cssFilesCode: snap.realFiles
+          .filter((file) => file.language === "css")
+          .map((file) => ({
+            code: file.value,
+          })),
+      });
+    } catch (e) {}
   }, [code, snap.files]);
 
   useMount(() => {
