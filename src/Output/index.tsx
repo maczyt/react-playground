@@ -9,6 +9,7 @@ import { subscribe, useSnapshot } from "valtio";
 import { toJS } from "../utils";
 import { codeToHash } from "../lib/hashCode";
 import ShowError from "./ShowError";
+import { watch } from "valtio/utils";
 
 const Output = () => {
   const compilerRef = useRef<Worker | null>(null);
@@ -30,7 +31,8 @@ const Output = () => {
       );
     }
   });
-  const { run: runCompile } = useDebounceFn((file: IFile) => {
+
+  const { run: saveHash } = useDebounceFn(() => {
     const files = snap.realFiles.map((file) => toJS(file));
     // 保存路由hash
     location.hash = codeToHash({
@@ -38,7 +40,10 @@ const Output = () => {
       reactVersion: snap.reactVersion,
       activeId: snap.activeId,
     });
+  });
 
+  const { run: runCompile } = useDebounceFn((file: IFile) => {
+    const files = snap.realFiles.map((file) => toJS(file));
     compilerRef.current?.postMessage({
       type: MessageType.compile,
       value: {
@@ -58,6 +63,11 @@ const Output = () => {
     };
     const un = subscribe(store.files, handleCompile);
     handleCompile();
+
+    watch((get) => {
+      get(store);
+      saveHash();
+    });
     return un;
   }, []);
 
