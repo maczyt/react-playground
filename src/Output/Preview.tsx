@@ -6,19 +6,26 @@ import { getIframeUrl } from "../utils";
 import { MessageType } from "../constants";
 import importmap from "../template/import-map.json?raw";
 import { useSnapshot } from "valtio";
-import { store } from "../store";
+import { errorStore, store } from "../store";
 
 const iframeUrl = getIframeUrl(iframeData);
 const Preview: FC<{
   code: string;
 }> = ({ code }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const handleMessage = useMemoizedFn(() => {
-    // console.log("ev", ev);
+  const handleMessage = useMemoizedFn(({ data }: MessageEvent) => {
+    if (data.type === MessageType.error) {
+      errorStore.message = data.message;
+      errorStore.filename = data.filename;
+    }
   });
   const snap = useSnapshot(store);
 
   useUpdateEffect(() => {
+    // 清除一下错误信息
+    errorStore.filename = "";
+    errorStore.message = "";
+
     iframeRef.current?.contentWindow?.postMessage({
       type: MessageType.update,
       code,

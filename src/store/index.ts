@@ -11,6 +11,7 @@ import {
 import { fileName2Language } from "../utils";
 import { uid } from "uid";
 import { hashToCode } from "../lib/hashCode";
+import { proxyMap } from "valtio/utils";
 
 const DefaultFiles: IFile[] = [
   {
@@ -58,4 +59,12 @@ export const store = proxy<{
   get activeFile() {
     return this.files.find((file: IFile) => file.id === this.activeId);
   },
+});
+
+export const errorStore = proxy<{
+  message?: string;
+  filename?: string;
+  filenameMap: Map<string, string>;
+}>({
+  filenameMap: proxyMap(),
 });

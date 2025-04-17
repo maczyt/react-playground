@@ -16,4 +16,5 @@ export enum MessageType {
   load = "loaded",
   update = "update",
   compile = "compile",
+  error = "error",
 }

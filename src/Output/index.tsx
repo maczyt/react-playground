@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import CompileWorker from "./compile.worker.ts?worker&inline";
 import { useDebounceFn, useMount } from "ahooks";
 import { MessageType } from "../constants";
-import { store } from "../store";
+import { errorStore, store } from "../store";
 import { watch } from "valtio/utils";
 import { useSnapshot } from "valtio";
 import { toJS } from "../utils";
 import { codeToHash } from "../lib/hashCode";
+import ShowError from "./ShowError";
 
 const Output = () => {
   const compilerRef = useRef<Worker | null>(null);
@@ -23,6 +24,7 @@ const Output = () => {
         "message",
         ({ data }: MessageEvent) => {
           if (data.type === MessageType.update) {
+            errorStore.filenameMap = data.map ?? new Map();
             setCompiledCode(data.code);
           }
         }
@@ -53,8 +55,9 @@ const Output = () => {
   }, []);
 
   return (
-    <Box width="100%" height="100%">
+    <Box width="100%" height="100%" position="relative">
       <Preview code={compiledCode} />
+      <ShowError />
     </Box>
   );
 };

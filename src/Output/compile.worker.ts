@@ -2,8 +2,10 @@ import { transform } from "@babel/standalone";
 import { MessageType } from "../constants";
 import { beforeTransformCodeHandler, getModuleFile } from "../utils";
 
+const filenameMap = new Map<string, string>();
 self.addEventListener("message", async ({ data }: MessageEvent) => {
   if (data.type !== "compile") return;
+  filenameMap.clear();
   const compiledCode = codeTransform(
     data.value.value,
     data.value.name,
@@ -12,6 +14,7 @@ self.addEventListener("message", async ({ data }: MessageEvent) => {
   self.postMessage({
     type: MessageType.update,
     code: compiledCode,
+    map: filenameMap,
   });
 });
 
@@ -40,9 +43,11 @@ function codeTransform(code: string, filename: string, files: IFile[]) {
                 const result =
                   codeTransform(moduleFile.value, moduleFile.name, files) ?? "";
 
-                path.node.source.value = URL.createObjectURL(
+                const url = URL.createObjectURL(
                   new Blob([result], { type: "application/javascript" })
                 );
+                filenameMap.set(url, moduleFile.name);
+                path.node.source.value = url;
               }
             }
           },

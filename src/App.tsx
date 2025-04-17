@@ -23,7 +23,11 @@ function App() {
             }}
           >
             <Header />
-            <Box>
+            <Box
+              sx={{
+                overflow: "hidden",
+              }}
+            >
               <Box
                 sx={{
                   height: "100%",
