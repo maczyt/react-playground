@@ -38,19 +38,19 @@ const Editor = () => {
       });
       editorRef.current = editor;
 
-      const handleTypeHint = () => {
-        store.files.forEach((file) => {
-          if (file.isImportMap || file.isEntry || file.isMain) return;
-          let key: string;
-          if (["json", "css"].includes(file.language)) {
-            key = `${file.name}`;
-          } else {
-            const name = file.name.split(".");
-            name.pop();
-            key = `${name.join(".")}`;
-          }
-        });
-      };
+      // const handleTypeHint = () => {
+      //   store.files.forEach((file) => {
+      //     if (file.isImportMap || file.isEntry || file.isMain) return;
+      //     let key: string;
+      //     if (["json", "css"].includes(file.language)) {
+      //       key = `${file.name}`;
+      //     } else {
+      //       const name = file.name.split(".");
+      //       name.pop();
+      //       key = `${name.join(".")}`;
+      //     }
+      //   });
+      // };
       // 处理类型提示
       // subscribe(store.files, handleTypeHint);
       // handleTypeHint();
