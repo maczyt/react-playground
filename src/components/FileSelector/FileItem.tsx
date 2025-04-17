@@ -1,7 +1,7 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Box, Theme } from "@mui/system";
 import { Input } from "antd";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useSnapshot } from "valtio";
 import { store } from "../../store";
 import { makeStyles } from "@mui/styles";
@@ -21,11 +21,14 @@ const FileItem: FC<{
   onDoubleClick?: () => void;
 }> = ({ file, onClick, onDoubleClick }) => {
   const state = useSnapshot(store);
-  const [status, setStatus] = useState<"input" | "label">(
-    state.editId === file.id ? "input" : "label"
-  );
+  const status = state.editId === file.id ? "input" : "label";
   const isActive = state.activeId === file.id;
   const classes = useStyles();
+  const [value, setValue] = useState(file.name);
+
+  useEffect(() => {
+    setValue(file.name);
+  }, [file.name]);
   return (
     <Box
       sx={{
@@ -61,24 +64,34 @@ const FileItem: FC<{
             placeItems: "center",
           }}
         >
-          {file.name}
+          {value}
         </Box>
       ) : (
         <Input
-          value={file.name}
+          autoFocus
+          value={value}
           onChange={(ev) => {
-            editFile(file.id, (file) => {
-              file.name = ev.target.value;
-            });
+            setValue(ev.target.value);
           }}
           variant="borderless"
           style={{
             width: "100px",
           }}
+          onKeyUp={(ev) => {
+            if (ev.key === "Enter") {
+              store.activeId = file.id;
+              store.editId = "";
+              editFile(file.id, (file) => {
+                file.name = value;
+              });
+            }
+          }}
           onBlur={() => {
-            setStatus("label");
             store.activeId = file.id;
             store.editId = "";
+            editFile(file.id, (file) => {
+              file.name = value;
+            });
           }}
         />
       )}

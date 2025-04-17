@@ -5,8 +5,7 @@ import CompileWorker from "./compile.worker.ts?worker&inline";
 import { useDebounceFn, useMount } from "ahooks";
 import { MessageType } from "../constants";
 import { errorStore, store } from "../store";
-import { watch } from "valtio/utils";
-import { useSnapshot } from "valtio";
+import { subscribe, useSnapshot } from "valtio";
 import { toJS } from "../utils";
 import { codeToHash } from "../lib/hashCode";
 import ShowError from "./ShowError";
@@ -52,11 +51,14 @@ const Output = () => {
   });
   // 编译代码
   useEffect(() => {
-    watch((get) => {
-      const files = get(store).realFiles;
+    const handleCompile = () => {
+      const files = store.realFiles;
       const entryFile = files.find((file) => file.isEntry);
       runCompile(entryFile!);
-    }, {});
+    };
+    const un = subscribe(store.files, handleCompile);
+    handleCompile();
+    return un;
   }, []);
 
   return (
