@@ -1,5 +1,6 @@
 import {
   DownloadOutlined,
+  GithubOutlined,
   MoonOutlined,
   ReloadOutlined,
   ShareAltOutlined,
@@ -149,6 +150,19 @@ const Header = () => {
                 download();
               }
             }}
+            style={{
+              color: _theme.palette.nav.btn,
+            }}
+          />
+        </Tooltip>
+        <Tooltip title={"View on Github"}>
+          <Button
+            color="default"
+            variant="link"
+            type="link"
+            icon={<GithubOutlined />}
+            target="_blank"
+            href="https://github.com/maczyt/react-playground"
             style={{
               color: _theme.palette.nav.btn,
             }}
