@@ -30,7 +30,7 @@ const Preview: FC<{
       snap.files.find((file) => file.isImportMap)?.value ?? "{}";
     try {
       const _importmap = JSON.stringify(
-        merge({}, JSON.parse(importmap), JSON.parse(snap.importmap))
+        merge({}, JSON.parse(snap.importmap), JSON.parse(importmap))
       );
       iframeRef.current?.contentWindow?.postMessage({
         type: MessageType.update,

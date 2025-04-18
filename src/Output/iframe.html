@@ -44,10 +44,10 @@
         }
 
         // 清除importmap
-        // const importmapElm = document.querySelector("#importmapSrc");
-        // if (importmapElm) {
-        //   importmapElm.remove();
-        // }
+        const importmapElm = document.querySelector("#importmapSrc");
+        if (importmapElm) {
+          importmapElm.remove();
+        }
 
         // 清除style
         const appStyleTags =
@@ -82,13 +82,13 @@
         // 更新 importmap
         // 销毁并重建 （因为重新的话，不会触发重新加载）
         if (data.importmap) {
-          const importmapElm = document.querySelector("#importmapSrc");
-          importmapElm.innerHTML = data.importmap;
-          // const elm = document.createElement("script");
-          // elm.type = "importmap";
-          // elm.id = "importmapSrc";
-          // elm.innerHTML = data.importmap;
-          // document.head.appendChild(elm);
+          // const importmapElm = document.querySelector("#importmapSrc");
+          // importmapElm.innerHTML = data.importmap;
+          const elm = document.createElement("script");
+          elm.type = "importmap";
+          elm.id = "importmapSrc";
+          elm.innerHTML = data.importmap;
+          document.head.appendChild(elm);
         }
 
         // 处理css

@@ -1,5 +1,6 @@
 import { proxy } from "valtio";
 import {
+  AntdCssFile,
   App,
   AppCss,
   IMPORT_MAP_FILE_NAME,
@@ -70,7 +71,7 @@ export const store = proxy<
     } else if (this.reactVersion === "react-17") {
       entryFile = React17MainFile;
     }
-    return [entryFile, ...this.files];
+    return [entryFile, AntdCssFile, ...this.files];
   },
   get importmap() {
     if (this.reactVersion === "react-19") {

@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 interface GhostSelectProps<T> {
   value?: T;
-  options?: Array<{ label: string; value: T }>;
+  options?: Array<{ label: string; value: T; disabled?: boolean }>;
   onChange?: (value: T) => void;
 }
 const GhostSelect = <T,>({ value, options, onChange }: GhostSelectProps<T>) => {
@@ -20,6 +20,7 @@ const GhostSelect = <T,>({ value, options, onChange }: GhostSelectProps<T>) => {
     return options?.map((option) => ({
       label: option.label,
       key: option.value as any,
+      disabled: option.disabled,
     }));
   }, [options]);
   const onClick = useMemoizedFn(({ key }) => {

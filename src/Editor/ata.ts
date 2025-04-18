@@ -13,6 +13,13 @@ export const createATA = async (onDownload?: ATADownloadFn) => {
           onDownload?.(code, path);
         },
       },
+      fetcher(input, init) {
+        const url = input.toString();
+        if (["antd"].some((pkg) => url.includes(pkg))) {
+          return Promise.resolve(new Response("", { status: 404 }));
+        }
+        return fetch(input, init);
+      },
     });
     return ata;
   } catch (e) {

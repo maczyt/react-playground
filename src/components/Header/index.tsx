@@ -67,6 +67,7 @@ const Header = () => {
                 {
                   label: "react@19",
                   value: "react-19",
+                  disabled: true,
                 },
                 {
                   label: "react@18",
@@ -75,6 +76,7 @@ const Header = () => {
                 {
                   label: "react@17",
                   value: "react-17",
+                  disabled: true,
                 },
               ]}
               value={snap.reactVersion}

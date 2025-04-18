@@ -2,6 +2,7 @@ import { fileName2Language } from "./utils";
 import React17Main from "./template/react17/main.tsx?raw";
 import React18Main from "./template/react18/main.tsx?raw";
 import React19Main from "./template/react19/main.tsx?raw";
+import AntdCss from "./template/antd.css?raw";
 
 import { uid } from "uid";
 
@@ -50,4 +51,13 @@ export const React19MainFile: IFile = {
   value: React19Main,
   hidden: true,
   isEntry: true,
+};
+
+export const AntdCssFile: IFile = {
+  id: uid(),
+  name: "antd.css",
+  language: "css",
+  value: AntdCss,
+  hidden: true,
+  readonly: true,
 };

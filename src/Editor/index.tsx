@@ -8,6 +8,7 @@ import { useRef } from "react";
 import { editFile } from "../store/actions";
 import { createATA } from "./ata";
 import { debounce } from "lodash-es";
+import antd from "../download/antd.d.ts?raw";
 
 loader.config({
   paths: {
@@ -38,22 +39,11 @@ const Editor = () => {
       });
       editorRef.current = editor;
 
-      // const handleTypeHint = () => {
-      //   store.files.forEach((file) => {
-      //     if (file.isImportMap || file.isEntry || file.isMain) return;
-      //     let key: string;
-      //     if (["json", "css"].includes(file.language)) {
-      //       key = `${file.name}`;
-      //     } else {
-      //       const name = file.name.split(".");
-      //       name.pop();
-      //       key = `${name.join(".")}`;
-      //     }
-      //   });
-      // };
-      // 处理类型提示
-      // subscribe(store.files, handleTypeHint);
-      // handleTypeHint();
+      // for antd
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        antd,
+        `file:///node_modules/@types/antd/index.d.ts`
+      );
 
       // ata
       const ata = await createATA((code, path) => {
@@ -67,7 +57,6 @@ const Editor = () => {
         ata?.(editor.getValue());
       });
       editor.onDidChangeModelContent(handleEditorChange);
-
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
         // 阻止浏览器保存页面
       });
