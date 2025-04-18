@@ -9,6 +9,7 @@ import { editFile } from "../store/actions";
 import { createATA } from "./ata";
 import { debounce } from "lodash-es";
 import antd from "../download/antd.d.ts?raw";
+import { Button, Modal, Typography } from "antd";
 
 loader.config({
   paths: {
@@ -69,22 +70,71 @@ const Editor = () => {
   }, [size?.width]);
 
   return (
-    <Box ref={containerRef} width={"100%"} flex="1">
-      {activeFile ? (
-        <MonacoEditor
-          value={activeFile.value}
-          onChange={(value) => {
-            editFile(activeFile.id, (file) => {
-              file.value = value ?? "";
+    <Box
+      ref={containerRef}
+      width={"100%"}
+      flex="1"
+      display="flex"
+      flexDirection={"column"}
+    >
+      <Box
+        sx={{
+          pl: "64px",
+        }}
+      >
+        <Button
+          color="primary"
+          variant="link"
+          style={{ padding: 0 }}
+          onClick={() => {
+            Modal.info({
+              title: "Available Packages",
+              width: 600,
+              content: (
+                <div>
+                  <p>
+                    我们内置了 <Typography.Text code>antd</Typography.Text>,
+                    您可以直接使用.
+                  </p>
+                  <p>
+                    支持es的模块，我们理论上来说都可以使用，可以来{" "}
+                    <Button
+                      color="primary"
+                      variant="link"
+                      href="https://esm.sh"
+                      target="_blank"
+                      style={{ padding: 0 }}
+                    >
+                      esm.sh
+                    </Button>{" "}
+                    查看.
+                  </p>
+                </div>
+              ),
+              onOk() {},
             });
           }}
-          height={"100%"}
-          language={activeFile.language}
-          path={activeFile.name}
-          onMount={handleMount}
-          theme={theme === "dark" ? "vs-dark" : "light"}
-        />
-      ) : null}
+        >
+          What's available?
+        </Button>
+      </Box>
+      <Box flex="1">
+        {activeFile ? (
+          <MonacoEditor
+            value={activeFile.value}
+            onChange={(value) => {
+              editFile(activeFile.id, (file) => {
+                file.value = value ?? "";
+              });
+            }}
+            height={"100%"}
+            language={activeFile.language}
+            path={activeFile.name}
+            onMount={handleMount}
+            theme={theme === "dark" ? "vs-dark" : "light"}
+          />
+        ) : null}
+      </Box>
     </Box>
   );
 };
