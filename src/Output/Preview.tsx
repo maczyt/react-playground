@@ -17,6 +17,11 @@ const Preview: FC<{
     if (data.type === MessageType.error) {
       errorStore.message = data.message;
       errorStore.filename = data.filename;
+    } else if (data.type === MessageType.reloadPage) {
+      // Fix importmap 更新没有生效问题
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     }
   });
   const snap = useSnapshot(store);

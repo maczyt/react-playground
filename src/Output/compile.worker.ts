@@ -5,6 +5,10 @@ import { beforeTransformCodeHandler, getModuleFile, jsonToJs } from "../utils";
 const filenameMap = new Map<string, string>();
 self.addEventListener("message", async ({ data }: MessageEvent) => {
   if (data.type !== "compile") return;
+  // 清理旧的 blob url 资源
+  Array.from(filenameMap.keys()).forEach((key) => {
+    URL.revokeObjectURL(key);
+  });
   filenameMap.clear();
   const compiledCode = codeTransform(
     data.value.value,

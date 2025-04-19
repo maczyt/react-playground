@@ -27,6 +27,7 @@ export enum MessageType {
   update = "update",
   compile = "compile",
   error = "error",
+  reloadPage = "reload-page",
 }
 export const React17MainFile: IFile = {
   id: uid(),

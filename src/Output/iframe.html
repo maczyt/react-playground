@@ -13,11 +13,33 @@
       });
 
       window.addEventListener("error", (ev) => {
-        window.parent.postMessage({
-          type: "error",
-          message: `(${ev.lineno},${ev.colno}) ${ev.message}`,
-          filename: ev.filename,
-        });
+        let needReload = false;
+        try {
+          // 处理importmap的问题
+          const reg =
+            /Import Map: "([^"]+)" matches with "\1" but is blocked by a null value/;
+          const matchResult = reg.exec(ev.message);
+          if (matchResult) {
+            const pkgName = matchResult[1];
+            const importmapElm = document.querySelector("#importmapSrc");
+            const importmap = JSON.parse(importmapElm.textContent);
+            const val = importmap?.["imports"]?.[pkgName];
+            if (val.startsWith(`https://esm.sh/${pkgName}`)) {
+              window.parent.postMessage({
+                type: "reload-page",
+                message: "",
+              });
+              needReload = true;
+            }
+          }
+        } catch (e) {}
+        if (!needReload) {
+          window.parent.postMessage({
+            type: "error",
+            message: `(${ev.lineno},${ev.colno}) ${ev.message}`,
+            filename: ev.filename,
+          });
+        }
         clear();
       });
 
@@ -41,12 +63,6 @@
           appSrcTag.remove();
           // 清除blob url资源
           URL.revokeObjectURL(oldSrc);
-        }
-
-        // 清除importmap
-        const importmapElm = document.querySelector("#importmapSrc");
-        if (importmapElm) {
-          importmapElm.remove();
         }
 
         // 清除style
@@ -80,15 +96,13 @@
         if (data.type !== "update") return;
         clear();
         // 更新 importmap
-        // 销毁并重建 （因为重新的话，不会触发重新加载）
         if (data.importmap) {
-          // const importmapElm = document.querySelector("#importmapSrc");
-          // importmapElm.innerHTML = data.importmap;
+          const importmapElm = document.querySelector("#importmapSrc");
           const elm = document.createElement("script");
           elm.type = "importmap";
           elm.id = "importmapSrc";
           elm.innerHTML = data.importmap;
-          document.head.appendChild(elm);
+          importmapElm.parentNode.replaceChild(elm, importmapElm);
         }
 
         // 处理css
