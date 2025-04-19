@@ -1,5 +1,6 @@
 {
   "imports": {
-    "antd": "https://esm.sh/antd@4.24.16?deps=react@18.3.1,react-dom@18.3.1"
+    "antd": "https://esm.sh/antd@4.24.16?deps=react@18.3.1,react-dom@18.3.1",
+    "canvas-confetti": "https://esm.sh/canvas-confetti@1.6.0"
   }
 }

@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "antd";
+import confetti from "canvas-confetti";
 
 function App() {
   const [count, setCount] = useState(0);
-
+  useEffect(() => {
+    confetti();
+  }, []);
   return (
     <>
       <h1>Hello World</h1>
