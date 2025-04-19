@@ -93,8 +93,20 @@ const Editor = () => {
               content: (
                 <div>
                   <p>
-                    我们内置了 <Typography.Text code>antd</Typography.Text>,
-                    您可以直接使用.
+                    我们内置了 <Typography.Text code>antd@4</Typography.Text>,
+                    您可以直接使用，点击查看
+                    <Button
+                      target="_blank"
+                      variant="link"
+                      color="primary"
+                      href="https://4x-ant-design.antgroup.com/components/overview-cn/"
+                      style={{
+                        padding: 0,
+                      }}
+                    >
+                      组件文档
+                    </Button>
+                    .
                   </p>
                   <p>
                     支持es的模块，我们理论上来说都可以使用，可以来{" "}
