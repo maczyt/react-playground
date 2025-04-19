@@ -33,7 +33,8 @@ const Output = () => {
   });
 
   const { run: saveHash } = useDebounceFn(() => {
-    const files = snap.realFiles.map((file) => toJS(file));
+    // Fix: 这里不能保存 realFiles
+    const files = snap.files.map((file) => toJS(file));
     // 保存路由hash
     location.hash = codeToHash({
       files,
