@@ -1,8 +1,10 @@
 import {
   DownloadOutlined,
+  ExclamationCircleOutlined,
   GithubOutlined,
   MoonOutlined,
   ReloadOutlined,
+  RollbackOutlined,
   ShareAltOutlined,
   SunOutlined,
 } from "@ant-design/icons";
@@ -68,7 +70,6 @@ const Header = () => {
                 {
                   label: "react@19",
                   value: "react-19",
-                  disabled: true,
                 },
                 {
                   label: "react@18",
@@ -77,7 +78,12 @@ const Header = () => {
                 {
                   label: "react@17",
                   value: "react-17",
-                  disabled: true,
+                  danger: true,
+                  extra: (
+                    <Tooltip title="React@17在编辑的时候会出现 removeChild 错误（Reload page可以解决），不推荐使用">
+                      <ExclamationCircleOutlined />
+                    </Tooltip>
+                  ),
                 },
               ]}
               value={snap.reactVersion}
@@ -130,6 +136,20 @@ const Header = () => {
             variant="link"
             type="link"
             icon={<ReloadOutlined />}
+            onClick={() => {
+              location.reload();
+            }}
+            style={{
+              color: _theme.palette.nav.btn,
+            }}
+          />
+        </Tooltip>
+        <Tooltip title={"Reset page"}>
+          <Button
+            color="default"
+            variant="link"
+            type="link"
+            icon={<RollbackOutlined />}
             onClick={() => {
               location.hash = "";
               location.reload();

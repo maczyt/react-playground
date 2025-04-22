@@ -13,10 +13,10 @@ import {
   React19ImportMap,
   React19MainFile,
 } from "../constants";
-import { fileName2Language } from "../utils";
+import { fileName2Language, toJS } from "../utils";
 import { uid } from "uid";
-import { hashToCode } from "../lib/hashCode";
-import { proxyMap } from "valtio/utils";
+import { codeToHash, hashToCode } from "../lib/hashCode";
+import { proxyMap, subscribeKey } from "valtio/utils";
 
 const DefaultFiles: IFile[] = [
   {
@@ -89,4 +89,18 @@ export const errorStore = proxy<{
   filenameMap: Map<string, string>;
 }>({
   filenameMap: proxyMap(),
+});
+
+subscribeKey(store, "reactVersion", (reactVersion) => {
+  const files = store.files.map((file) => toJS(file));
+  // 保存路由hash
+  location.hash = codeToHash({
+    files,
+    reactVersion: reactVersion,
+    activeId: store.activeId,
+  });
+
+  setTimeout(() => {
+    location.reload();
+  }, 100);
 });

@@ -1,11 +1,18 @@
 import { DownOutlined } from "@ant-design/icons";
 import { useMemoizedFn } from "ahooks";
 import { Dropdown, Space } from "antd";
-import { useMemo } from "react";
+import { omit } from "lodash-es";
+import { ReactNode, useMemo } from "react";
 
 interface GhostSelectProps<T> {
   value?: T;
-  options?: Array<{ label: string; value: T; disabled?: boolean }>;
+  options?: Array<{
+    label: string;
+    value: T;
+    disabled?: boolean;
+    danger?: boolean;
+    extra?: ReactNode;
+  }>;
   onChange?: (value: T) => void;
 }
 const GhostSelect = <T,>({ value, options, onChange }: GhostSelectProps<T>) => {
@@ -18,9 +25,8 @@ const GhostSelect = <T,>({ value, options, onChange }: GhostSelectProps<T>) => {
   }, [options]);
   const items = useMemo(() => {
     return options?.map((option) => ({
-      label: option.label,
+      ...omit(option, ["value"]),
       key: option.value as any,
-      disabled: option.disabled,
     }));
   }, [options]);
   const onClick = useMemoizedFn(({ key }) => {

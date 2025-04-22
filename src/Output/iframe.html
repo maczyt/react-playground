@@ -36,7 +36,7 @@
         if (!needReload) {
           window.parent.postMessage({
             type: "error",
-            message: `(${ev.lineno},${ev.colno}) ${ev.message}`,
+            message: `(${ev.lineno},${ev.colno}) ${ev.error.message}`,
             filename: ev.filename,
           });
         }
